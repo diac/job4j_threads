@@ -15,9 +15,9 @@ public class ConsoleProgress implements Runnable {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
+                System.out.println();
                 System.out.println("The process has been interrupted");
-                e.printStackTrace();
-                break;
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -31,5 +31,10 @@ public class ConsoleProgress implements Runnable {
             e.printStackTrace();
         }
         progress.interrupt();
+        try {
+            progress.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
