@@ -17,7 +17,7 @@ public class Wget implements Runnable {
     @Override
     public void run() {
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream("pom_tmp.xml")) {
+             FileOutputStream fileOutputStream = new FileOutputStream(getOutputFileName(url))) {
             byte[] dataBuffer = new byte[speed];
             int bytesRead;
             while ((bytesRead = in.read(dataBuffer, 0, speed)) != -1) {
@@ -74,5 +74,9 @@ public class Wget implements Runnable {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private static String getOutputFileName(String sourceUrl) {
+        return "download_" + sourceUrl.substring(sourceUrl.lastIndexOf('/') + 1);
     }
 }
