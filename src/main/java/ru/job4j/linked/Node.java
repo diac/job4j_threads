@@ -1,4 +1,4 @@
-package linked;
+package ru.job4j.linked;
 
 public class Node<T> {
 
