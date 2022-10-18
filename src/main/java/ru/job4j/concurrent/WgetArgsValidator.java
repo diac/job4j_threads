@@ -2,7 +2,10 @@ package ru.job4j.concurrent;
 
 import java.net.URL;
 
-public class WgetArgsValidator {
+public final class WgetArgsValidator {
+
+    private WgetArgsValidator() {
+    }
 
     public static void validateArgs(String[] args) {
         if (args.length < 2) {

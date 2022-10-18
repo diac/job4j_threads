@@ -40,12 +40,12 @@ public class Wget implements Runnable {
                         pauseMillis = SECOND - timePerStep;
                         try {
                             Thread.sleep(pauseMillis);
-                            startTime = System.currentTimeMillis();
-                            downloadedBytes = 0;
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
+                    startTime = System.currentTimeMillis();
+                    downloadedBytes = 0;
                 }
             }
         } catch (IOException e) {
