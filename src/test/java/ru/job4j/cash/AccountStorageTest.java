@@ -65,7 +65,7 @@ class AccountStorageTest {
                 .orElseThrow(() -> new IllegalStateException("Not found account by id = 1"));
         var secondAccount = storage.getById(2)
                 .orElseThrow(() -> new IllegalStateException("Not found account by id = 2"));
-        assertThat(firstAccount.amount()).isEqualTo(-1);
+        assertThat(firstAccount.amount()).isEqualTo(0);
         assertThat(secondAccount.amount()).isEqualTo(100);
     }
 }

@@ -2,7 +2,6 @@ package ru.job4j.cash;
 
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.Set;
 
 public class AccountStorage {
 
@@ -28,11 +27,12 @@ public class AccountStorage {
         boolean result = false;
         Optional<Account> fromAccount = getById(fromId);
         Optional<Account> toAccount = getById(toId);
-        if (fromAccount.isPresent() && toAccount.isPresent()) {
-            if (fromAccount.get().amount() >= amount) {
-                accounts.put(fromId, new Account(fromId, fromAccount.get().amount() - amount));
-                accounts.put(toId, new Account(toId, toAccount.get().amount() + amount));
-            }
+        if (
+                fromAccount.isPresent() && toAccount.isPresent()
+                        && fromAccount.get().amount() >= amount
+        ) {
+            update(new Account(fromId, fromAccount.get().amount() - amount));
+            update(new Account(toId, toAccount.get().amount() + amount));
         }
         return result;
     }
