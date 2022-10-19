@@ -12,15 +12,23 @@ class SimpleBlockingQueueTest {
     public void whenPollFromOverflow() throws InterruptedException {
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(3);
         Thread consumer = new Thread(() -> {
-            queue.poll();
-            queue.poll();
+            try {
+                queue.poll();
+                queue.poll();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         });
         Thread producer = new Thread(() -> {
-            queue.offer(1);
-            queue.offer(2);
-            queue.offer(3);
-            queue.offer(4);
-            queue.offer(5);
+            try {
+                queue.offer(1);
+                queue.offer(2);
+                queue.offer(3);
+                queue.offer(4);
+                queue.offer(5);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         });
         consumer.start();
         producer.start();
