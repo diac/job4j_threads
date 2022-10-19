@@ -9,49 +9,29 @@ public class AccountStorage {
     private final HashMap<Integer, Account> accounts = new HashMap<>();
 
     public synchronized boolean add(Account account) {
-        boolean result = false;
-        if (!accounts.containsKey(account.id())) {
-            accounts.put(account.id(), account);
-            result = true;
-        }
-        return result;
+        return accounts.putIfAbsent(account.id(), account) == null;
     }
 
     public synchronized boolean update(Account account) {
-        boolean result = false;
-        if (accounts.containsKey(account.id())) {
-            accounts.put(account.id(), account);
-            result = true;
-        }
-        return result;
+        return accounts.replace(account.id(), account) != null;
     }
 
     public synchronized boolean delete(int id) {
-        boolean result = false;
-        if (accounts.containsKey(id)) {
-            accounts.remove(id);
-            result = true;
-        }
-        return result;
+        return accounts.remove(id) != null;
     }
 
     public synchronized Optional<Account> getById(int id) {
-        Optional<Account> account = Optional.empty();
-        if (accounts.containsKey(id)) {
-            account = Optional.of(accounts.get(id));
-        }
-        return account;
+        return Optional.ofNullable(accounts.get(id));
     }
 
     public synchronized boolean transfer(int fromId, int toId, int amount) {
         boolean result = false;
-        if (accounts.keySet().containsAll(Set.of(fromId, toId))) {
-            Account fromAccount = accounts.get(fromId);
-            Account toAccount = accounts.get(toId);
-            if (fromAccount.amount() > 0) {
-                accounts.put(fromId, new Account(fromId, fromAccount.amount() - amount));
-                accounts.put(toId, new Account(toId, toAccount.amount() + amount));
-                result = true;
+        Optional<Account> fromAccount = getById(fromId);
+        Optional<Account> toAccount = getById(toId);
+        if (fromAccount.isPresent() && toAccount.isPresent()) {
+            if (fromAccount.get().amount() >= amount) {
+                accounts.put(fromId, new Account(fromId, fromAccount.get().amount() - amount));
+                accounts.put(toId, new Account(toId, toAccount.get().amount() + amount));
             }
         }
         return result;
