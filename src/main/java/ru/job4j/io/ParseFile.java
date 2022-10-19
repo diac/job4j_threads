@@ -3,7 +3,7 @@ package ru.job4j.io;
 import java.io.*;
 import java.util.function.Predicate;
 
-public class ParseFile {
+public final class ParseFile {
 
     private final File file;
 
@@ -15,16 +15,24 @@ public class ParseFile {
         return file;
     }
 
-    public String getContent(Predicate<Character> filter) throws IOException {
-        String output = "";
-        try (InputStream i = new FileInputStream(file)) {
+    public synchronized String getContent() throws IOException {
+        return filterContent(character -> true);
+    }
+
+    public String getContentWithoutUnicode() throws IOException {
+        return filterContent(character -> character < 0x80);
+    }
+
+    private synchronized String filterContent(Predicate<Character> filter) throws IOException {
+        StringBuilder output = new StringBuilder();
+        try (InputStream i = new BufferedInputStream(new FileInputStream(file))) {
             int data;
-            while ((data = i.read()) > 0) {
+            while ((data = i.read()) > -1) {
                 if (filter.test((char) data)) {
-                    output += (char) data;
+                    output.append(data);
                 }
             }
         }
-        return output;
+        return output.toString();
     }
 }
