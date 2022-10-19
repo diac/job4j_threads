@@ -55,23 +55,9 @@ class AccountStorageTest {
     }
 
     @Test
-    public void whenTransferAndSrcAccountOverdraft() {
-        var storage = new AccountStorage();
-        storage.add(new Account(1, 100));
-        storage.add(new Account(2, 100));
-        storage.transfer(1, 2, 200);
-        var firstAccount = storage.getById(1)
-                .orElseThrow(() -> new IllegalStateException("Not found account by id = 1"));
-        var secondAccount = storage.getById(2)
-                .orElseThrow(() -> new IllegalStateException("Not found account by id = 2"));
-        assertThat(firstAccount.amount()).isEqualTo(-100);
-        assertThat(secondAccount.amount()).isEqualTo(300);
-    }
-
-    @Test
     public void whenTransferAndSrcAccountInsufficientFunds() {
         var storage = new AccountStorage();
-        storage.add(new Account(1, -1));
+        storage.add(new Account(1, 0));
         storage.add(new Account(2, 100));
         boolean transferResult = storage.transfer(1, 2, 100);
         assertThat(transferResult).isFalse();
