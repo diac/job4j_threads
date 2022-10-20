@@ -33,6 +33,7 @@ public class AccountStorage {
         ) {
             update(new Account(fromId, fromAccount.get().amount() - amount));
             update(new Account(toId, toAccount.get().amount() + amount));
+            result = true;
         }
         return result;
     }
