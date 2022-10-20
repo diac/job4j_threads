@@ -2,29 +2,26 @@ package ru.job4j.forkjoinpool;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ParallelSearchTest {
 
     @Test
     public void whenSearchShortListOfString() {
-        List<String> array = List.of(
+        String[] array = new String[]{
                 "One",
                 "Two",
                 "Three",
                 "Four",
                 "Five"
-        );
-        ParallelSearch<String> search = new ParallelSearch<>("Two", array);
-        int expected = search.search();
+        };
+        int expected = ParallelSearch.search("Two", array);
         assertThat(expected).isEqualTo(1);
     }
 
     @Test
     public void whenSearchLongListOfString() {
-        List<String> array = List.of(
+        String[] array = new String[]{
                 "One",
                 "Two",
                 "Three",
@@ -39,33 +36,36 @@ class ParallelSearchTest {
                 "Twelve",
                 "Thirteen",
                 "Fourteen"
-        );
-        ParallelSearch<String> search = new ParallelSearch<>("Thirteen", array);
-        int expected = search.search();
+        };
+        int expected = ParallelSearch.search("Thirteen", array);
         assertThat(expected).isEqualTo(12);
     }
 
     @Test
     public void whenSearchShortListOfInteger() {
-        List<Integer> array = List.of(1, 2, 3, 4, 5);
-        ParallelSearch<Integer> search = new ParallelSearch<>(3, array);
-        int expected = search.search();
+        Integer[] array = new Integer[] {1, 2, 3, 4, 5};
+        int expected = ParallelSearch.search(3, array);
         assertThat(expected).isEqualTo(2);
     }
 
     @Test
     public void whenSearchLongListOfInteger() {
-        List<Integer> array = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21);
-        ParallelSearch<Integer> search = new ParallelSearch<>(15, array);
-        int expected = search.search();
+        Integer[] array = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
+        int expected = ParallelSearch.search(15, array);
         assertThat(expected).isEqualTo(14);
     }
 
     @Test
     public void whenSearchNotFound() {
-        List<Integer> array = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21);
-        ParallelSearch<Integer> search = new ParallelSearch<>(1000, array);
-        int expected = search.search();
+        Integer[] array = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
+        int expected = ParallelSearch.search(1000, array);
         assertThat(expected).isEqualTo(-1);
+    }
+
+    @Test
+    public void whenSearchLast() {
+        Integer[] array = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
+        int expected = ParallelSearch.search(21, array);
+        assertThat(expected).isEqualTo(20);
     }
 }
