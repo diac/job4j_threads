@@ -30,4 +30,3 @@ public class Cache {
         return memory.get(id);
     }
 }
-
