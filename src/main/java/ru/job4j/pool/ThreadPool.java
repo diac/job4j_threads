@@ -17,26 +17,28 @@ public class ThreadPool {
         for (var i = 0; i < THREADS_NUMBER; i++) {
             threads.add(new Thread(() -> {
                 try {
-                    while (tasks.isEmpty()) {
-                        wait();
-                    }
                     tasks.poll().run();
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }));
         }
+        threads.forEach(Thread::start);
     }
 
     public void work(Runnable job) throws InterruptedException {
         tasks.offer(job);
-        notifyAll();
     }
 
-    public void shutdown() throws InterruptedException {
-        while (!tasks.isEmpty()) {
-            tasks.poll();
-        }
+    public void shutdown() {
         threads.forEach(thread -> Thread.currentThread().interrupt());
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        ThreadPool pool = new ThreadPool();
+        pool.work(() -> System.out.println("Hello"));
+        pool.work(() -> System.out.println("Howdy"));
+        pool.shutdown();
     }
 }
