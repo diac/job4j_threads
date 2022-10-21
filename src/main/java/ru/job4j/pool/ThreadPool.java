@@ -37,8 +37,14 @@ public class ThreadPool {
 
     public static void main(String[] args) throws InterruptedException {
         ThreadPool pool = new ThreadPool();
-        pool.work(() -> System.out.println("Hello"));
-        pool.work(() -> System.out.println("Howdy"));
+        for (int i = 0; i < TASKS_NUMBER; i++) {
+            var taskIndex = i;
+            pool.work(() -> {
+                for (int j = 0; j < 5; j++) {
+                    System.out.printf("Task #%d, step #%d%n", taskIndex, j);
+                }
+            });
+        }
         pool.shutdown();
     }
 }
