@@ -32,12 +32,12 @@ public class ThreadPool {
     }
 
     public void shutdown() {
-        threads.forEach(thread -> Thread.currentThread().interrupt());
+        threads.forEach(Thread::interrupt);
     }
 
     public static void main(String[] args) throws InterruptedException {
         ThreadPool pool = new ThreadPool();
-        for (int i = 0; i < TASKS_NUMBER; i++) {
+        for (int i = 0; i < TASKS_NUMBER / 2; i++) {
             var taskIndex = i;
             pool.work(() -> {
                 for (int j = 0; j < 5; j++) {
