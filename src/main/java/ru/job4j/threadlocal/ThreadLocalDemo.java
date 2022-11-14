@@ -11,8 +11,8 @@ public class ThreadLocalDemo {
     public static void main(String[] args) throws InterruptedException {
         Thread first = new FirstThread();
         Thread second = new SecondThread();
-        tl.set("Это поток main."); // записываем данные в переменную ThreadLocal
-        System.out.println(tl.get()); // получаем данные из этой переменной и выводим на печать
+        tl.set("Это поток main.");
+        System.out.println(tl.get());
         first.start();
         second.start();
         first.join();
